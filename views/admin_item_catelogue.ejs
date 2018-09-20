@@ -14,12 +14,14 @@
     <h1>TEST LOOP</h1>
     <div>
       <% for (i in items){ %>
+        <% if (items[i].userID === user_session){ %>
         <div>
           <p><%= items[i].itemName %><p/>
             <p><%= items[i].price %><p/>
               <p><%= items[i].photo_url %><p/>
                 <p><%= items[i].description %><p/>
         </div>
+        <% } %>
         <% } %>
     </div>
   </body>

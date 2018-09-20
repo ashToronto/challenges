@@ -100,8 +100,8 @@ module.exports = () => {
     const username = req.body.username;
     const email = req.body.email;
     const password = req.body.password
-    if (!req.body.email || !req.body.password) { // test with user or password is blank
-      res.status(400).send(systemMessages('Blank cannot be used for user or password.'));
+    if (!req.body.email || !req.body.password) { // test  user or password is not empty
+      res.status(400).send('Text field cannot be empty');
     } else {
       const newUserId = randomString(6);
       let userExist = false;
