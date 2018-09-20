@@ -6,8 +6,21 @@
     <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
     <script type="text/javascript" src="/scripts/app.js"></script>
   </head>
-
   <body>
     <h1>ADMIN ITEMS PAGE</h1>
-    </body>
+    <a href="/admin/add">ADD ANOTHER ITEM</a>
+
+
+    <h1>TEST LOOP</h1>
+    <div>
+      <% for (i in items){ %>
+        <div>
+          <p><%= items[i].itemName %><p/>
+            <p><%= items[i].price %><p/>
+              <p><%= items[i].photo_url %><p/>
+                <p><%= items[i].description %><p/>
+        </div>
+        <% } %>
+    </div>
+  </body>
 </html>

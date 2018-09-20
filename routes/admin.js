@@ -79,14 +79,17 @@ module.exports = () => {
           res.redirect("/")
       } else if (req.session["user_id"] === itemDatabase[req.params.id].userID){
         const templateVars = {
+          itemName: itemDatabase[req.params.id].itemName,
+          price: itemDatabase[req.params.id].price,
+          photo_url: itemDatabase[req.params.id].photo_url,
+          description: itemDatabase[req.params.id].description,
           items: itemDatabase,
           admin: req.params.id,
           user_session: req.session["user_id"],
         }
         console.log("MOST RECENT TEST: USER IS:  " +
-        itemDatabase[req.params.id].userID + " ITEM IS: " +
-        itemDatabase[req.params.id].itemName
-      );
+        itemDatabase +
+        " ITEM IS: " + itemDatabase)
         res.render("admin_item_catelogue", templateVars)
       }
     });
