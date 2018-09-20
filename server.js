@@ -4,8 +4,6 @@ const bodyParser      = require("body-parser");
 const cookieSession   = require("cookie-session");
 const bcrypt          = require('bcryptjs');
 const app             = express();
-const configuration   = require('./knexfile.js')['development']
-const knex            = require('knex')(configuration);
 
 
 app.set("view engine", "ejs");
@@ -33,8 +31,8 @@ app.get("/", (req, res) => {
 });
 
 //Mounting Routes
-app.use("/clients", clientsRoutes(knex));
-app.use("/admin", adminRoutes(knex));
+app.use("/clients", clientsRoutes());
+app.use("/admin", adminRoutes());
 
 app.listen(PORT, () => {
   console.log("Example app listening on port " + PORT);
