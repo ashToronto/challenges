@@ -59,7 +59,7 @@ module.exports = () => {
       res.render("login")
     });
 
-    // CREATE ITEMS FOR CLIENT CATALOGUE
+    // CREATE ITEMS FOR CLIENT CATALOGUE AND UPDATE WITH ADMIN PANEL
     router.get("/add", (req, res) => {
       if (req.session.user_id) {
         const templateVars = {
@@ -74,11 +74,20 @@ module.exports = () => {
     });
 
     // ADMIN ITEM MANAGEMENT
-    router.get("/items", (req, res) => {
-        if (req.session.user_id) {
-          res.render("admin_item_catelogue")
-      } else {
-        res.redirect("/")
+    router.get("/items/:id", (req, res) => {
+        if (!req.session.user_id) {
+          res.redirect("/")
+      } else if (req.session["user_id"] === itemDatabase[req.params.id].userID){
+        const templateVars = {
+          items: itemDatabase,
+          admin: req.params.id,
+          user_session: req.session["user_id"],
+        }
+        console.log("MOST RECENT TEST: USER IS:  " +
+        itemDatabase[req.params.id].userID + " ITEM IS: " +
+        itemDatabase[req.params.id].itemName
+      );
+        res.render("admin_item_catelogue", templateVars)
       }
     });
 
@@ -130,7 +139,7 @@ module.exports = () => {
       for (i in userDatabase) {
         if (userDatabase[i].username === username && bcrypt.compareSync(password, userDatabase[i].password)) {
           req.session.user_id = i;
-          console.log("LOGIN DETAILE: " + i)
+          console.log("LOGGED IN AS: " + i)
           res.redirect("panel");
         }
       }
@@ -146,9 +155,9 @@ module.exports = () => {
 
 
   // *********** CREATING ITEMS FOR CLIENT CATELOGUE - POST REQUEST  *************
-  // Add a new menu item
+  // Add new menu items to user Admin panel and client shop
   router.post('/add', (req, res) => {
-    if (req.session["user_id"]) {
+    if (req.session["user_id"] || !(itemDatabase[req.params.id])) {
     const randomID = randomString();
     itemDatabase[randomID] = {
       userID: req.session["user_id"],
@@ -158,8 +167,8 @@ module.exports = () => {
       photo_url: req.body.photo_url,
       description: req.body.description
     }
-    console.log(itemDatabase[randomID])
-    res.render("admin");
+    console.log("NEW ITEM CREATED: " + itemDatabase[randomID])
+    res.redirect("items/" + randomID);
   } else {
     res.redirect("login")
   }
