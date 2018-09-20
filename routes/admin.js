@@ -7,11 +7,22 @@ module.exports = () => {
   // ********************** LOCAL DATABASE ************************
 
   const userDatabase = {
-    "randomID": {
+    "userRandomId": {
       id: "saberID",
       username: "saber",
       email: "saber@example.com",
-      password: "saber"
+      password: "saber",
+    }
+  }
+
+  const itemDatabase = {
+    "itemRandomId": {
+      userID: "",
+      itemId: "",
+      itemName: "",
+      price: "",
+      photo_url: "",
+      description: ""
     }
   }
 
@@ -22,7 +33,6 @@ module.exports = () => {
       var randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
       for (var i = 0; i <= 6; i++) {
         generate += randomChar.charAt((Math.floor(Math.random() * randomChar.length)));
-
       }
       return generate;
     }
@@ -52,7 +62,12 @@ module.exports = () => {
     // CREATE ITEMS FOR CLIENT CATALOGUE
     router.get("/add", (req, res) => {
       if (req.session.user_id) {
-        res.render("create_item");
+        const templateVars = {
+          username: userDatabase[req.session.user_id],
+          itemDatabase: itemDatabase[req.session.user_id]
+        };
+        console.log(templateVars.username, templateVars.itemDatabase)
+        res.render("create_item", templateVars);
       } else {
         res.redirect("/")
       }
@@ -79,8 +94,8 @@ module.exports = () => {
       const newUserId = randomString(6);
       let userExist = false;
       // Search for corresponding user in local object
-      for (let userId in userDatabase) {
-        if (userDatabase[userId].email === req.body.email) {
+      for (let i in userDatabase) {
+        if (userDatabase[i].email === req.body.email) {
           userExist = true;
         }
       }
@@ -94,7 +109,7 @@ module.exports = () => {
           password: bcrypt.hashSync(req.body.password, 10)
         }
         req.session.user_id = newUserId;
-        console.log("USER CREATED: " + userDatabase[newUserId])
+        console.log("USER CREATED: " + userDatabase[newUserId].id)
         res.redirect("panel");
       }
 
@@ -133,14 +148,21 @@ module.exports = () => {
   // *********** CREATING ITEMS FOR CLIENT CATELOGUE - POST REQUEST  *************
   // Add a new menu item
   router.post('/add', (req, res) => {
-    res.status(200);
-    const name = req.body.name;
-    const description = req.body.description;
-    const item_price = parseFloat(req.body.price);
-    const photo_url = req.body.photo_url;
-    console.log(name)
-
-    res.redirect("panel");
+    if (req.session["user_id"]) {
+    const randomID = randomString();
+    itemDatabase[randomID] = {
+      userID: req.session["user_id"],
+      itemId: randomID,
+      itemName: req.body.name,
+      price: parseFloat(req.body.price),
+      photo_url: req.body.photo_url,
+      description: req.body.description
+    }
+    console.log(itemDatabase[randomID])
+    res.render("admin");
+  } else {
+    res.redirect("login")
+  }
   });
 
   return router;
