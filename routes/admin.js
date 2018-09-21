@@ -70,19 +70,18 @@ module.exports = () => {
     }
   });
 
-  // ADMIN ITEM MANAGEMENT
+  // ADMIN ITEM MANAGEMENT EDITING
   router.get("/items", (req, res) => {
     if (req.session.user_id) {
       let userItemList = {};
       for (j in itemDatabase) {
         if (itemDatabase[j].userID === req.session["user_id"]) {
-          userUrl[j] = urlDatabase[j];
+          userItemList[j] = itemDatabase[j];
         }
       }
-
       const templateVars = {
-        username: userDatabase,
-        items: itemDatabase
+        username: userDatabase[req.session["user_id"]],
+        items: userItemList
       };
       console.log(userDatabase + " " + itemDatabase)
       res.render("items_manager", templateVars)
@@ -91,16 +90,12 @@ module.exports = () => {
     }
   });
 
+// ADMIN ITEM MANAGEMENT CREATING
   router.get("/items/:id", (req, res) => {
     if (!req.session.user_id) {
       res.redirect("/")
     } else if (req.session["user_id"] === itemDatabase[req.params.id].userID) {
       const templateVars = {
-        itemId: itemDatabase[req.params.id].itemID,
-        itemName: itemDatabase[req.params.id].itemName,
-        price: itemDatabase[req.params.id].price,
-        photo_url: itemDatabase[req.params.id].photo_url,
-        description: itemDatabase[req.params.id].description,
         items: itemDatabase,
         admin: req.params.id,
         user_session: req.session["user_id"],
@@ -138,7 +133,7 @@ module.exports = () => {
         }
         req.session.user_id = newUserId;
         console.log("USER CREATED: " + userDatabase[newUserId].id)
-        res.redirect("panel");
+        res.redirect("items");
       }
 
     }
@@ -157,7 +152,7 @@ module.exports = () => {
         if (userDatabase[i].username === username && bcrypt.compareSync(password, userDatabase[i].password)) {
           req.session.user_id = i;
           console.log("LOGGED IN AS: " + i)
-          res.redirect("panel");
+          res.redirect("items");
         }
       }
     }
@@ -191,22 +186,20 @@ module.exports = () => {
 
 
 
-  // *********** DELETING ITEMS FROM ALL CATELOGUES - POST REQUEST  *************
+  // *********** ADMIN MANAGEMENT - DELETING ITEMS - POST REQUEST  *************
   router.post("/items/:id/delete", (req, res) => {
     if (req.session["user_id"]) {
       const id = req.params.id;
       const erase = itemDatabase[id].userID
-
-      console.log("posted: " + req.params.id)
-      console.log("posted 2: " + erase)
-      if (erase === req.session["user_id"]) {
-        delete itemDatabase[id]
-        res.redirect("items")
+      if (erase === req.session["user_id"]){
+         delete itemDatabase[id]
+         res.redirect('http://localhost:8080/admin/items')
       } else {
-        res.status(401).send("You are not logged-in")
+        res.redirect('http://localhost:8080/admin/items')
       }
-    }
-
+    }else {
+        res.redirect('/')
+      }
 
   });
 

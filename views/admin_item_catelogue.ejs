@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <h1>ADMIN ITEMS PAGE</h1>
+  <h1>CONFIRM YOUR CATELOGUE LIST</h1>
   <a href="/admin/add">ADD ANOTHER ITEM</a>
   <p><a href="/admin/items" >Back to Admin manager</a></p>
 
@@ -27,19 +27,8 @@
             <input type="text" name="description" value="<%= items[i].description %>" placeholder="<%= items[i].description %>" readonly/>
             <% } %>
               <% } %>
-                <br><input type="submit" value="SAVE" name="username">
+                <br><input type="submit" value="POST ITEMS TO CATELOGUE" name="username">
           </form>
-        </div>
-        <div>
-          <% for (i in items){ %>
-            <% if (items[i].userID === user_session){ %>
-              <form method="POST" action="/admin/items/<%= i %>/delete">
-                <input name="userId" value="<%= items[i].itemId %>" />
-                <input name="itemsId" value="<%= items[i].userID %>" />
-                <input type="submit" value="DELETE" />
-              </form>
-              <% } %>
-                <% } %>
         </div>
   </div>
 </body>

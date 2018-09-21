@@ -16,9 +16,16 @@
   <h1>TEST LOOP</h1>
   <div>
     <% for (i in items){ %>
-        <p> <%= items[i] %> </p>
+      <div>
+      <p> <%= items[i].itemName %> </p>
+      <p> <%= items[i].price %> </p>
+      <p> <%= items[i].photo_url %> </p>
+      <p> <%= items[i].description %> </p>
+        <form method="POST" action= "/admin/items/<%= i %>/delete">
+						<input type="submit" value="Delete"/>
+					</form>
+          </div>
         <% } %>
-        </div>
   </div>
 </body>
 
