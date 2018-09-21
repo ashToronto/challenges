@@ -3,7 +3,6 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 
 module.exports = () => {
-
   // ********************** LOCAL DATABASE ************************
 
   const userDatabase = {
@@ -25,71 +24,91 @@ module.exports = () => {
       description: ""
     }
   }
-
-    // ********************** HELPERS ************************
-    // This random string is used for create a random ID for user
-    function randomString() {
-      var generate = "";
-      var randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-      for (var i = 0; i <= 6; i++) {
-        generate += randomChar.charAt((Math.floor(Math.random() * randomChar.length)));
-      }
-      return generate;
+  // ********************** HELPERS ************************
+  // This random string is used for create a random ID for user
+  function randomString() {
+    var generate = "";
+    var randomChar = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for (var i = 0; i <= 6; i++) {
+      generate += randomChar.charAt((Math.floor(Math.random() * randomChar.length)));
     }
+    return generate;
+  }
 
-    // ********************** ALL AVAILABLE ADMIN PATHS - GET REQUESTS ************************
+  // ********************** ALL AVAILABLE ADMIN PATHS - GET REQUESTS ************************
 
-    // ADMIN PANEL HOME PAGE
-    router.get("/panel", (req, res) => {
-      if (req.session.user_id) {
-        res.render("admin");
-      } else {
-        res.redirect("/")
-      }
-    });
+  // ADMIN PANEL HOME PAGE
+  router.get("/panel", (req, res) => {
+    if (req.session.user_id) {
+      res.render("admin");
+    } else {
+      res.redirect("/")
+    }
+  });
 
-    // ADMIN REGISTRATION
-    router.get("/register", (req, res) => {
-      res.status(200);
-      res.render("register");
-    });
+  // ADMIN REGISTRATION
+  router.get("/register", (req, res) => {
+    res.status(200);
+    res.render("register");
+  });
 
-    // ADMIN LOGIN
-    router.get("/login", (req, res) => {
-      res.render("login")
-    });
+  // ADMIN LOGIN
+  router.get("/login", (req, res) => {
+    res.render("login")
+  });
 
-    // CREATE ITEMS FOR CLIENT CATALOGUE AND UPDATE WITH ADMIN PANEL
-    router.get("/add", (req, res) => {
-      if (req.session.user_id) {
-        const templateVars = {
-          username: userDatabase[req.session.user_id],
-          itemDatabase: itemDatabase[req.session.user_id]
-        };
-        console.log(templateVars.username, templateVars.itemDatabase)
-        res.render("create_item", templateVars);
-      } else {
-        res.redirect("/")
-      }
-    });
+  // CREATE ITEMS FOR CLIENT CATALOGUE AND UPDATE WITH ADMIN PANEL
+  router.get("/add", (req, res) => {
+    if (req.session.user_id) {
+      const templateVars = {
+        username: userDatabase[req.session.user_id],
+        itemDatabase: itemDatabase[req.session.user_id]
+      };
+      res.render("create_item", templateVars);
+    } else {
+      res.redirect("/")
+    }
+  });
 
-    // ADMIN ITEM MANAGEMENT
-    router.get("/items/:id", (req, res) => {
-        if (!req.session.user_id) {
-          res.redirect("/")
-      } else if (req.session["user_id"] === itemDatabase[req.params.id].userID){
-        const templateVars = {
-          itemName: itemDatabase[req.params.id].itemName,
-          price: itemDatabase[req.params.id].price,
-          photo_url: itemDatabase[req.params.id].photo_url,
-          description: itemDatabase[req.params.id].description,
-          items: itemDatabase,
-          admin: req.params.id,
-          user_session: req.session["user_id"],
+  // ADMIN ITEM MANAGEMENT
+  router.get("/items", (req, res) => {
+    if (req.session.user_id) {
+      let userItemList = {};
+      for (j in itemDatabase) {
+        if (itemDatabase[j].userID === req.session["user_id"]) {
+          userUrl[j] = urlDatabase[j];
         }
-        res.render("admin_item_catelogue", templateVars)
       }
-    });
+
+      const templateVars = {
+        username: userDatabase,
+        items: itemDatabase
+      };
+      console.log(userDatabase + " " + itemDatabase)
+      res.render("items_manager", templateVars)
+    } else {
+      res.redirect("/")
+    }
+  });
+
+  router.get("/items/:id", (req, res) => {
+    if (!req.session.user_id) {
+      res.redirect("/")
+    } else if (req.session["user_id"] === itemDatabase[req.params.id].userID) {
+      const templateVars = {
+        itemId: itemDatabase[req.params.id].itemID,
+        itemName: itemDatabase[req.params.id].itemName,
+        price: itemDatabase[req.params.id].price,
+        photo_url: itemDatabase[req.params.id].photo_url,
+        description: itemDatabase[req.params.id].description,
+        items: itemDatabase,
+        admin: req.params.id,
+        user_session: req.session["user_id"],
+      }
+
+      res.render("admin_item_catelogue", templateVars)
+    }
+  });
 
   // ********************** REGISTRATION - POST REQUESTS  ************************
 
@@ -155,20 +174,40 @@ module.exports = () => {
   // Add new menu items to user Admin panel and client shop
   router.post('/add', (req, res) => {
     if (req.session["user_id"] || !(itemDatabase[req.params.id])) {
-    const randomID = randomString();
-    itemDatabase[randomID] = {
-      userID: req.session["user_id"],
-      itemId: randomID,
-      itemName: req.body.name,
-      price: parseFloat(req.body.price),
-      photo_url: req.body.photo_url,
-      description: req.body.description
+      const randomID = randomString();
+      itemDatabase[randomID] = {
+        userID: req.session["user_id"],
+        itemId: randomID,
+        itemName: req.body.name,
+        price: parseFloat(req.body.price),
+        photo_url: req.body.photo_url,
+        description: req.body.description
+      }
+      res.redirect("items/" + randomID);
+    } else {
+      res.redirect("login")
     }
-    console.log("NEW ITEM CREATED: " + itemDatabase)
-    res.redirect("items/" + randomID);
-  } else {
-    res.redirect("login")
-  }
+  });
+
+
+
+  // *********** DELETING ITEMS FROM ALL CATELOGUES - POST REQUEST  *************
+  router.post("/items/:id/delete", (req, res) => {
+    if (req.session["user_id"]) {
+      const id = req.params.id;
+      const erase = itemDatabase[id].userID
+
+      console.log("posted: " + req.params.id)
+      console.log("posted 2: " + erase)
+      if (erase === req.session["user_id"]) {
+        delete itemDatabase[id]
+        res.redirect("items")
+      } else {
+        res.status(401).send("You are not logged-in")
+      }
+    }
+
+
   });
 
   return router;

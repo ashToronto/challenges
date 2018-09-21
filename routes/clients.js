@@ -1,5 +1,5 @@
-const express         = require("express");
-const router          = express.Router();
+const express = require("express");
+const router = express.Router();
 
 const database = [];
 
@@ -7,9 +7,9 @@ module.exports = () => {
 
   router.get("/shoppers", (req, res) => {
     const templateVars = {
-             database: database
-          };
-          console.log("Received ITEMS GET:  "+ database.length)
+      database: database
+    };
+    console.log("Received ITEMS GET:  " + database.length)
     res.render("clients", templateVars);
   });
 
@@ -19,7 +19,6 @@ module.exports = () => {
     const item_price = req.body.item_price
     const photo_url = req.body.photo_url
     const description = req.body.description
-
     database.push({
       itemName: itemName,
       item_price: item_price,
