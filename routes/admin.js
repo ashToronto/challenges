@@ -87,9 +87,6 @@ module.exports = () => {
           admin: req.params.id,
           user_session: req.session["user_id"],
         }
-        console.log("MOST RECENT TEST: USER IS:  " +
-        itemDatabase +
-        " ITEM IS: " + itemDatabase)
         res.render("admin_item_catelogue", templateVars)
       }
     });
@@ -128,8 +125,6 @@ module.exports = () => {
     }
   });
 
-
-
   // ********************** LOGIN - POST  ************************
 
   router.post("/login", (req, res) => {
@@ -155,7 +150,6 @@ module.exports = () => {
     req.session = null;
     res.redirect("/")
   })
-
 
   // *********** CREATING ITEMS FOR CLIENT CATELOGUE - POST REQUEST  *************
   // Add new menu items to user Admin panel and client shop

@@ -1,28 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Admin</title>
 
-    <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
-    <script type="text/javascript" src="/scripts/app.js"></script>
-  </head>
-  <body>
-    <h1>ADMIN ITEMS PAGE</h1>
-    <a href="/admin/add">ADD ANOTHER ITEM</a>
+<head>
+  <title>Admin</title>
+
+  <script type="text/javascript" src="/vendor/jquery-3.0.0.js"></script>
+  <script type="text/javascript" src="/scripts/app.js"></script>
+</head>
+
+<body>
+  <h1>ADMIN ITEMS PAGE</h1>
+  <a href="/admin/add">ADD ANOTHER ITEM</a>
 
 
-    <h1>TEST LOOP</h1>
-    <div>
-      <% for (i in items){ %>
-        <% if (items[i].userID === user_session){ %>
+  <h1>TEST LOOP</h1>
+  <div>
+    <% for (i in items){ %>
+      <% if (items[i].userID === user_session){ %>
         <div>
-          <p><%= items[i].itemName %><p/>
-            <p><%= items[i].price %><p/>
-              <p><%= items[i].photo_url %><p/>
-                <p><%= items[i].description %><p/>
+          <form action='http://localhost:8080/clients/shoppers' method='POST'>
+            <input type="text" name="item_name" value="<%= items[i].itemName %>" placeholder="<%= items[i].itemName %>" readonly/>
+            <input type="text" name="item_price" value="<%= items[i].price %>" placeholder="<%= items[i].price %>" readonly/>
+            <input type="text" name="photo_url" value="<%= items[i].photo_url %>" placeholder="<%= items[i].photo_url %>" readonly/>
+            <input type="text" name="description" value="<%= items[i].description %>" placeholder="<%= items[i].description %>" readonly/>
+            <input type="submit" value="Deploy" name="username" size="40">
+          </form>
         </div>
         <% } %>
-        <% } %>
-    </div>
-  </body>
+          <% } %>
+  </div>
+
+  <h1>TEST LOOP 2</h1>
+  <div>
+        <div>
+          <form action='http://localhost:8080/clients/shoppers' method='POST'>
+            <% for (i in items){ %>
+              <% if (items[i].userID === user_session){ %>
+                <input type="text" name="item_name" value="<%= items[i].itemName %>" placeholder="<%= items[i].itemName %>" readonly/>
+                <input type="text" name="item_price" value="<%= items[i].price %>" placeholder="<%= items[i].price %>" readonly/>
+                <input type="text" name="photo_url" value="<%= items[i].photo_url %>" placeholder="<%= items[i].photo_url %>" readonly/>
+                <input type="text" name="description" value="<%= items[i].description %>" placeholder="<%= items[i].description %>" readonly/>
+                <input type="submit" value="Deploy" name="username" size="40">
+
+            <% } %>
+              <% } %>
+              <input type="submit" value="Deploy" name="username" size="40">
+          </form>
+        </div>
+  </div>
+</body>
+
 </html>
