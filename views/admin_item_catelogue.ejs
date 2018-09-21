@@ -23,28 +23,9 @@
             <input type="text" name="item_price" value="<%= items[i].price %>" placeholder="<%= items[i].price %>" readonly/>
             <input type="text" name="photo_url" value="<%= items[i].photo_url %>" placeholder="<%= items[i].photo_url %>" readonly/>
             <input type="text" name="description" value="<%= items[i].description %>" placeholder="<%= items[i].description %>" readonly/>
-            <input type="submit" value="Deploy" name="username" size="40">
-          </form>
-        </div>
-        <% } %>
-          <% } %>
-  </div>
-
-  <h1>TEST LOOP 2</h1>
-  <div>
-        <div>
-          <form action='http://localhost:8080/clients/shoppers' method='POST'>
-            <% for (i in items){ %>
-              <% if (items[i].userID === user_session){ %>
-                <input type="text" name="item_name" value="<%= items[i].itemName %>" placeholder="<%= items[i].itemName %>" readonly/>
-                <input type="text" name="item_price" value="<%= items[i].price %>" placeholder="<%= items[i].price %>" readonly/>
-                <input type="text" name="photo_url" value="<%= items[i].photo_url %>" placeholder="<%= items[i].photo_url %>" readonly/>
-                <input type="text" name="description" value="<%= items[i].description %>" placeholder="<%= items[i].description %>" readonly/>
-                <input type="submit" value="Deploy" name="username" size="40">
-
             <% } %>
               <% } %>
-              <input type="submit" value="Deploy" name="username" size="40">
+            <br><input type="submit" value="Submit all to catelogue" name="username" size="40">
           </form>
         </div>
   </div>

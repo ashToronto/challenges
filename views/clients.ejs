@@ -12,6 +12,18 @@
 <body>
   <h1>Ultimate Deal</h1>
   <body>
+    <a href="/">HOME</a>
+    <h1>TEST LOOP PRODUCTS</h1>
+    <div>
+      <% for (i in database){ %>
+          <div>
+              <p><%= database[i].itemName %></p>
+              <p><%= database[i].item_price %></p>
+              <p><%= database[i].description %></p>
+              <p><%= database[i].photo_url %></p>
+            <% } %>
+          </div>
+    </div>
   </body>
 </body>
 

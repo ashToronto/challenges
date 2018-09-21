@@ -164,7 +164,7 @@ module.exports = () => {
       photo_url: req.body.photo_url,
       description: req.body.description
     }
-    console.log("NEW ITEM CREATED: " + itemDatabase[randomID])
+    console.log("NEW ITEM CREATED: " + itemDatabase)
     res.redirect("items/" + randomID);
   } else {
     res.redirect("login")
