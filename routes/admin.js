@@ -184,8 +184,6 @@ module.exports = () => {
     }
   });
 
-
-
   // *********** ADMIN MANAGEMENT - DELETING ITEMS - POST REQUEST  *************
   router.post("/items/:id/delete", (req, res) => {
     if (req.session["user_id"]) {
@@ -197,7 +195,7 @@ module.exports = () => {
       } else {
         res.redirect('http://localhost:8080/admin/items')
       }
-    }else {
+    } else {
         res.redirect('/')
       }
 

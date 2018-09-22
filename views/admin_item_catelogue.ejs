@@ -21,14 +21,16 @@
       <% if (items[i].userID === user_session){ %>
         <div>
           <form action='http://localhost:8080/clients/shoppers' method='POST'>
+            <input type="text" name="itemId" value="<%= items[i].itemId %>" placeholder="<%= items[i].itemId %>" readonly/>
             <input type="text" name="item_name" value="<%= items[i].itemName %>" placeholder="<%= items[i].itemName %>" readonly/>
             <input type="text" name="item_price" value="<%= items[i].price %>" placeholder="<%= items[i].price %>" readonly/>
             <input type="text" name="photo_url" value="<%= items[i].photo_url %>" placeholder="<%= items[i].photo_url %>" readonly/>
             <input type="text" name="description" value="<%= items[i].description %>" placeholder="<%= items[i].description %>" readonly/>
+            <br><input type="submit" value="POST ITEMS TO CATELOGUE" name="username">
+          </form>
             <% } %>
               <% } %>
-                <br><input type="submit" value="POST ITEMS TO CATELOGUE" name="username">
-          </form>
+
         </div>
   </div>
 </body>
